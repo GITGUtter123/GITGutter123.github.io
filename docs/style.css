@@ -7,6 +7,7 @@ body {
   align-items: center;
   height: 100vh;
   background-color: #f4f4f9;
+  overflow: hidden;
 }
 
 /* Calculator Container */
@@ -16,11 +17,14 @@ body {
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   width: 300px;
+  max-width: 90%;
+  box-sizing: border-box;
+  overflow: hidden; /* Prevent content from overflowing the container */
 }
 
 /* Display */
 .display {
-  width: 100%;
+  width: 100%; /* Ensure the display fits inside the calculator */
   height: 60px;
   font-size: 1.5rem;
   margin-bottom: 15px;
@@ -29,6 +33,12 @@ body {
   border: 2px solid #ddd;
   border-radius: 5px;
   background-color: #f9f9f9;
+  box-sizing: border-box;
+
+  /* Prevent overflow */
+  overflow: hidden;
+  white-space: nowrap; /* Prevent text wrapping */
+  text-overflow: ellipsis; /* Add "..." when text overflows */
 }
 
 /* Buttons Grid */
