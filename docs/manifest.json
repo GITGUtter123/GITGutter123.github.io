@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Dashboard",
-  "description": "Extension for schoolorganized.github.io/-",
+  "name": "calculator simple",
+  "description": "Extension for gitgutter123.github.io",
   "version": "1.0",
   "action": {
     "default_icon": "icon.png",
@@ -12,7 +12,7 @@
     "storage"
   ],
   "host_permissions": [
-    "http://schoolorganized.github.io/-/*",
-    "https://schoolorganized.github.io/-/*"
+    "https://gitgutter123.github.io//*",
+    "https://gitgutter123.github.io//*"
   ]
 }
