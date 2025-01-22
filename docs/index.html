@@ -12,6 +12,7 @@
             align-items: center;
             height: 100vh;
             background-color: #70c5ce;
+            overflow: hidden;
         }
         canvas {
             border: 2px solid #000;
@@ -26,6 +27,7 @@
             border: 1px solid #ccc;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 10;
         }
         #calculator input {
             width: 100%;
@@ -75,14 +77,15 @@
         // Flappy Bird game code
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
+        const pipeGap = 100;
 
         let bird = {
             x: 50,
             y: 150,
             width: 20,
             height: 20,
-            gravity: 0.6,
-            lift: -15,
+            gravity: 0.25,  // Lower gravity for smoother descent
+            lift: -6,       // Increase lift for stronger upward movement
             velocity: 0
         };
 
@@ -103,13 +106,15 @@
         }
 
         function update() {
-            bird.velocity += bird.gravity;
-            bird.y += bird.velocity;
+            bird.velocity += bird.gravity;  // Apply gravity to velocity
+            bird.y += bird.velocity;  // Move the bird based on its velocity
 
+            // If the bird hits the bottom or top of the canvas, reset the game
             if (bird.y + bird.height > canvas.height || bird.y < 0) {
                 resetGame();
             }
 
+            // Move pipes and check for collisions
             for (let pipe of pipes) {
                 pipe.x -= 2;
 
@@ -123,13 +128,13 @@
                 }
             }
 
+            // Add new pipes at intervals
             if (frameCount % 90 === 0) {
                 let pipeHeight = Math.floor(Math.random() * (canvas.height - 200)) + 50;
-                let gap = 100;
                 pipes.push({
                     x: canvas.width,
                     top: pipeHeight,
-                    bottom: canvas.height - pipeHeight - gap,
+                    bottom: canvas.height - pipeHeight - pipeGap,
                     width: 20
                 });
             }
@@ -153,8 +158,8 @@
         }
 
         document.body.onkeydown = function(e) {
-            if (e.keyCode === 32) {
-                bird.velocity = bird.lift;
+            if (e.keyCode === 32 && document.getElementById('calculator').style.display === 'none') {
+                bird.velocity = bird.lift;  // Apply lift on spacebar press
             }
         };
 
@@ -163,11 +168,7 @@
         // Calculator code
         function toggleCalculator() {
             const calculator = document.getElementById('calculator');
-            if (calculator.style.display === 'none' || calculator.style.display === '') {
-                calculator.style.display = 'block';
-            } else {
-                calculator.style.display = 'none';
-            }
+            calculator.style.display = calculator.style.display === 'none' || calculator.style.display === '' ? 'block' : 'none';
         }
 
         function appendToDisplay(char) {
@@ -181,7 +182,7 @@
         function calculateResult() {
             const display = document.getElementById('calcDisplay');
             try {
-                display.value = eval(display.value);
+                display.value = eval(display.value) || 0;
             } catch {
                 display.value = 'Error';
             }
