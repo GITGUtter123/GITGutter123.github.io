@@ -1,6 +1,6 @@
 {
-  "manifest_version": 1,
-  "name": "calculator simple",
+  "manifest_version": 3,
+  "name": "Calculator Simple",
   "description": "Extension for gitgutter123.github.io",
   "version": "1.0",
   "action": {
@@ -8,11 +8,9 @@
     "default_popup": "index.html"
   },
   "permissions": [
-    "activeTab",
     "storage"
   ],
   "host_permissions": [
-    "https://gitgutter123.github.io//*",
-    "https://gitgutter123.github.io//*"
+    "https://gitgutter123.github.io/*"
   ]
 }
