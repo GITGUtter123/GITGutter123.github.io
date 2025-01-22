@@ -3,10 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My GitHub Website</title>
+    <title>COVID-19 Symptom Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            text-align: center;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+        }
+        textarea {
+            width: 100%;
+            height: 60px;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        .result.positive {
+            color: red;
+        }
+        .result.negative {
+            color: green;
+        }
+    </style>
 </head>
 <body>
-    <h1>this is a work in progress</h1>
-    <p>This is a simple website hosted on GitHub Pages.</p>
+    <div class="container">
+        <h1>COVID-19 Symptom Checker</h1>
+        <p>Enter your symptoms separated by commas:</p>
+        <textarea id="symptomsInput" placeholder="e.g., fever, sore throat"></textarea>
+        <button onclick="checkSymptoms()">Check Symptoms</button>
+        <div id="result" class="result"></div>
+    </div>
+    <script>
+        const covidSymptoms = ["breathing", "dry cough", "fever", "sore throat", "loss of smell", "loss of taste"];
+
+        function checkSymptoms() {
+            const userInput = document.getElementById("symptomsInput").value.toLowerCase().trim();
+            const userSymptoms = userInput.split(",").map(s => s.trim());
+            let matchingSymptoms = 0;
+
+            userSymptoms.forEach(symptom => {
+                if (covidSymptoms.includes(symptom)) {
+                    matchingSymptoms++;
+                }
+            });
+
+            const resultDiv = document.getElementById("result");
+            if (matchingSymptoms >= 2) {
+                resultDiv.textContent = "You have multiple COVID-19 symptoms. Please visit a doctor.";
+                resultDiv.className = "result positive";
+            } else {
+                resultDiv.textContent = "You have less than two COVID-19 symptoms. Please stay indoors and take precautionary measures.";
+                resultDiv.className = "result negative";
+            }
+        }
+    </script>
 </body>
 </html>
