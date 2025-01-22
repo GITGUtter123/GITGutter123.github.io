@@ -1,196 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flappy Bird with Calculator</title>
-    <style>
-        body {
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #70c5ce;
-            overflow: hidden;
-        }
-        canvas {
-            border: 2px solid #000;
-        }
-        #calculator {
-            display: none;
-            position: absolute;
-            top: 10%;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #fff;
-            border: 1px solid #ccc;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            z-index: 10;
-        }
-        #calculator input {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            font-size: 18px;
-        }
-        #calculator button {
-            width: 23%;
-            padding: 10px;
-            margin: 5px 1%;
-            font-size: 18px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>calculator ease</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .calculator {
+      width: 350px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .display {
+      width: 180%;
+      height: 90px;
+      margin-bottom: 20px;
+      font-size: 1.5em;
+      text-align: right;
+      padding: 10px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+    }
+    .button {
+      width: 70px;
+      height: 50px;
+      margin: 5px;
+      font-size: 1.2em;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .button:active {
+      background: #0056b3;
+    }
+    .button.operator {
+      background: #ffc107;
+      color: #000;
+    }
+    .button.clear {
+      background: #dc3545;
+    }
+  </style>
 </head>
 <body>
-    <button onclick="toggleCalculator()">Open Calculator</button>
-    <canvas id="gameCanvas" width="320" height="480"></canvas>
-    <div id="calculator">
-        <input type="text" id="calcDisplay" disabled>
-        <br>
-        <button onclick="appendToDisplay('7')">7</button>
-        <button onclick="appendToDisplay('8')">8</button>
-        <button onclick="appendToDisplay('9')">9</button>
-        <button onclick="appendToDisplay('/')">/</button>
-        <br>
-        <button onclick="appendToDisplay('4')">4</button>
-        <button onclick="appendToDisplay('5')">5</button>
-        <button onclick="appendToDisplay('6')">6</button>
-        <button onclick="appendToDisplay('*')">*</button>
-        <br>
-        <button onclick="appendToDisplay('1')">1</button>
-        <button onclick="appendToDisplay('2')">2</button>
-        <button onclick="appendToDisplay('3')">3</button>
-        <button onclick="appendToDisplay('-')">-</button>
-        <br>
-        <button onclick="appendToDisplay('0')">0</button>
-        <button onclick="appendToDisplay('.')">.</button>
-        <button onclick="calculateResult()">=</button>
-        <button onclick="appendToDisplay('+')">+</button>
-        <br>
-        <button onclick="clearDisplay()">C</button>
-        <button onclick="closeCalculator()">Close</button>
+  <div class="calculator">
+    <input type="text" id="display" class="display" disabled />
+    <div>
+      <button class="button" onclick="appendValue('7')">7</button>
+      <button class="button" onclick="appendValue('8')">8</button>
+      <button class="button" onclick="appendValue('9')">9</button>
+      <button class="button operator" onclick="appendValue('/')">/</button>
     </div>
+    <div>
+      <button class="button" onclick="appendValue('4')">4</button>
+      <button class="button" onclick="appendValue('5')">5</button>
+      <button class="button" onclick="appendValue('6')">6</button>
+      <button class="button operator" onclick="appendValue('*')">*</button>
+    </div>
+    <div>
+      <button class="button" onclick="appendValue('1')">1</button>
+      <button class="button" onclick="appendValue('2')">2</button>
+      <button class="button" onclick="appendValue('3')">3</button>
+      <button class="button operator" onclick="appendValue('-')">-</button>
+    </div>
+    <div>
+      <button class="button" onclick="appendValue('0')">0</button>
+      <button class="button" onclick="appendValue('.')">.</button>
+      <button class="button clear" onclick="clearDisplay()">C</button>
+      <button class="button operator" onclick="appendValue('+')">+</button>
+    </div>
+    <div>
+      <button class="button operator" onclick="appendValue('Math.sin(')">sin</button>
+      <button class="button operator" onclick="appendValue('Math.cos(')">cos</button>
+      <button class="button operator" onclick="appendValue('Math.tan(')">tan</button>
+      <button class="button operator" onclick="calculateResult()">=</button>
+    </div>
+  </div>
 
-    <script>
-        // Flappy Bird game code
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const pipeGap = 100;
+  <script>
+    const display = document.getElementById('display');
 
-        let bird = {
-            x: 50,
-            y: 150,
-            width: 20,
-            height: 20,
-            gravity: 0.25,  // Lower gravity for smoother descent
-            lift: -6,       // Increase lift for stronger upward movement
-            velocity: 0
-        };
+    function appendValue(value) {
+      display.value += value;
+    }
 
-        let pipes = [];
-        let frameCount = 0;
+    function clearDisplay() {
+      display.value = '';
+    }
 
-        function drawBird() {
-            ctx.fillStyle = 'yellow';
-            ctx.fillRect(bird.x, bird.y, bird.width, bird.height);
-        }
-
-        function drawPipes() {
-            ctx.fillStyle = 'green';
-            for (let pipe of pipes) {
-                ctx.fillRect(pipe.x, 0, pipe.width, pipe.top);
-                ctx.fillRect(pipe.x, canvas.height - pipe.bottom, pipe.width, pipe.bottom);
-            }
-        }
-
-        function update() {
-            bird.velocity += bird.gravity;  // Apply gravity to velocity
-            bird.y += bird.velocity;  // Move the bird based on its velocity
-
-            // If the bird hits the bottom or top of the canvas, reset the game
-            if (bird.y + bird.height > canvas.height || bird.y < 0) {
-                resetGame();
-            }
-
-            // Move pipes and check for collisions
-            for (let pipe of pipes) {
-                pipe.x -= 2;
-
-                if (pipe.x + pipe.width < 0) {
-                    pipes.shift();
-                }
-
-                if (bird.x < pipe.x + pipe.width && bird.x + bird.width > pipe.x && 
-                    (bird.y < pipe.top || bird.y + bird.height > canvas.height - pipe.bottom)) {
-                    resetGame();
-                }
-            }
-
-            // Add new pipes at intervals
-            if (frameCount % 90 === 0) {
-                let pipeHeight = Math.floor(Math.random() * (canvas.height - 200)) + 50;
-                pipes.push({
-                    x: canvas.width,
-                    top: pipeHeight,
-                    bottom: canvas.height - pipeHeight - pipeGap,
-                    width: 20
-                });
-            }
-
-            frameCount++;
-        }
-
-        function resetGame() {
-            bird.y = 150;
-            bird.velocity = 0;
-            pipes = [];
-            frameCount = 0;
-        }
-
-        function gameLoop() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawBird();
-            drawPipes();
-            update();
-            requestAnimationFrame(gameLoop);
-        }
-
-        document.body.onkeydown = function(e) {
-            if (e.keyCode === 32 && document.getElementById('calculator').style.display === 'none') {
-                bird.velocity = bird.lift;  // Apply lift on spacebar press
-            }
-        };
-
-        gameLoop();
-
-        // Calculator code
-        function toggleCalculator() {
-            const calculator = document.getElementById('calculator');
-            calculator.style.display = calculator.style.display === 'none' || calculator.style.display === '' ? 'block' : 'none';
-        }
-
-        function appendToDisplay(char) {
-            document.getElementById('calcDisplay').value += char;
-        }
-
-        function clearDisplay() {
-            document.getElementById('calcDisplay').value = '';
-        }
-
-        function calculateResult() {
-            const display = document.getElementById('calcDisplay');
-            try {
-                display.value = eval(display.value) || 0;
-            } catch {
-                display.value = 'Error';
-            }
-        }
-
-        function closeCalculator() {
-            document.getElementById('calculator').style.display = 'none';
-        }
-    </script>
+    function calculateResult() {
+      try {
+        display.value = eval(display.value);
+      } catch (e) {
+        display.value = 'Error';
+      }
+    }
+  </script>
 </body>
 </html>
