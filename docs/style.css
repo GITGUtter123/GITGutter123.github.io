@@ -19,7 +19,9 @@ body {
   width: 300px;
   max-width: 90%;
   box-sizing: border-box;
-  overflow: hidden; /* Prevent content from overflowing the container */
+  display: flex;
+  flex-direction: column; /* Ensure children stack vertically */
+  align-items: stretch; /* Stretch children to fit width */
 }
 
 /* Display */
@@ -27,7 +29,7 @@ body {
   width: 100%; /* Ensure the display fits inside the calculator */
   height: 60px;
   font-size: 1.5rem;
-  margin-bottom: 15px;
+  margin: 0 0 15px 0; /* Remove side margins and keep bottom spacing */
   padding: 10px;
   text-align: right;
   border: 2px solid #ddd;
